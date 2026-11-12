@@ -1,0 +1,37 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowListBackupBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": "arn:aws:s3:::corp-infra-backups-prod"
+    },
+    {
+      "Sid": "AllowUploadNewBackupsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:AbortMultipartUpload",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": "arn:aws:s3:::corp-infra-backups-prod/backups/*"
+    },
+    {
+      "Sid": "DenyDeleteToProtectAgainstRansomware",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:PutLifecycleConfiguration"
+      ],
+      "Resource": [
+        "arn:aws:s3:::corp-infra-backups-prod",
+        "arn:aws:s3:::corp-infra-backups-prod/*"
+      ]
+    }
+  ]
+}
